@@ -112,9 +112,6 @@
     async function fetchWaterLevel() {
       try {
         const level = parseFloat((Math.random() * tankHeight).toFixed(1));
-
-        const level = parseFloat(data.level);
-
         const percentage = ((level / tankHeight) * 100).toFixed(1);
 
         // Update text display
