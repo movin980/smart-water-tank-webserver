@@ -111,8 +111,8 @@
 
     async function fetchWaterLevel() {
       try {
-        const response = await fetch('/data');
-        const data = await response.json();
+        const level = parseFloat((Math.random() * tankHeight).toFixed(1));
+
         const level = parseFloat(data.level);
 
         const percentage = ((level / tankHeight) * 100).toFixed(1);
