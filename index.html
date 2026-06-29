@@ -110,32 +110,49 @@
     });
 
     async function fetchWaterLevel() {
-      try {
-        const level = parseFloat((Math.random() * tankHeight).toFixed(1));
-        const percentage = ((level / tankHeight) * 100).toFixed(1);
+  try {
 
-        // Update text display
-        levelDisplay.textContent = `${level} cm`;
-        percentDisplay.textContent = `${percentage} % full`;
+    if (filling) {
+      level += 0.5;
 
-        // Add to chart
-        const now = new Date().toLocaleTimeString();
-        if (chartData.labels.length > 15) {
-          chartData.labels.shift();
-          chartData.datasets[0].data.shift();
-        }
-        chartData.labels.push(now);
-        chartData.datasets[0].data.push(level);
-        levelChart.update();
-      } catch (err) {
-        console.error("Error fetching data:", err);
-        levelDisplay.textContent = 'Error';
-        percentDisplay.textContent = '';
+      if (level >= tankHeight) {
+        level = tankHeight;
+        filling = false;
+      }
+
+    } else {
+
+      level -= 0.5;
+
+      if (level <= 0) {
+        level = 0;
+        filling = true;
       }
     }
 
+    const percentage = ((level / tankHeight) * 100).toFixed(1);
+
+    levelDisplay.textContent = `${level.toFixed(1)} cm`;
+    percentDisplay.textContent = `${percentage} % full`;
+
+    const now = new Date().toLocaleTimeString();
+
+    if (chartData.labels.length > 15) {
+      chartData.labels.shift();
+      chartData.datasets[0].data.shift();
+    }
+
+    chartData.labels.push(now);
+    chartData.datasets[0].data.push(level);
+
+    levelChart.update();
+
+  } catch (err) {
+    console.error(err);
+  }
+}
     // Fetch every 5 seconds
-    setInterval(fetchWaterLevel, 5000);
+    setInterval(fetchWaterLevel, 1000);
     window.onload = fetchWaterLevel;
   </script>
 
